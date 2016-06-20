@@ -13,7 +13,7 @@ import java.security.spec.InvalidKeySpecException;
  * https://docs.oracle.com/javase/tutorial/security/apisign/step3.html
  */
 public class Part2 {
-    private static final String signatureType = "SHA1withRSA";
+    public static final String signatureType = "SHA1withRSA";
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
         RsaProxy rsaProxy = new RsaProxy();
@@ -30,17 +30,24 @@ public class Part2 {
     private static void writeSignedFile(String fileData, byte[] signature, String signedBy) throws IOException {
         FileOutputStream fos = new FileOutputStream(String.format("./files/INPUT(SIGNEDBY%s).ext", signedBy));
         OutputStreamWriter osw = new OutputStreamWriter(fos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
+        baos.write(signature.length);
         // Write sig length
-        osw.write(String.format("%s\n", signature.length));
+        //osw.write(String.format("%s\n", signature.length));
 
         //write sig
-        osw.write(String.format("%s\n", signature.));
+        //osw.write(String.format("%s\n", signature.));
+        baos.write(signature);
 
         // write data
-        osw.write(String.format("%s\n", fileData.getBytes()));
+        //osw.write(String.format("%s\n", fileData.getBytes()));
+        baos.write(fileData.getBytes());
+
+        baos.writeTo(fos);
 
         osw.close();
+        baos.close();
         fos.close();
     }
 
